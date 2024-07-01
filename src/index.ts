@@ -1,9 +1,10 @@
 import { ApolloClient, ApolloError, InMemoryCache, gql } from '@apollo/client';
 import { EntityModelAppUser } from './generated';
+import { User } from './interfaces';
 
 interface ResultData {
     // data に入ってくるオブジェクト名と、その型
-    users: EntityModelAppUser[];
+    users: User[];
 }
 
 const fetchUsers = async () => {

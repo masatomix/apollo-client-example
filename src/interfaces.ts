@@ -1,3 +1,18 @@
+export type User = {
+    id: string
+    firstName?: String
+    lastName?: String
+    email?: String
+    age: number
+    companyCode: String
+    company: Company
+}
+
+export type Company = {
+    code: string
+    name?: String
+}
+
 
 export type UserInput = {
     userId: string
