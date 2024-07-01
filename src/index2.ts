@@ -1,6 +1,5 @@
-import { ApolloClient, ApolloError, InMemoryCache, gql } from '@apollo/client';
-import { EntityModelAppUser } from './generated';
-import { FailResponse, Response, SuccessResponse, UpdateUserVariables, UserInput } from './interfaces';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { FailResponse, Response, UpdateUserVariables } from './interfaces';
 
 
 interface ResultData {
