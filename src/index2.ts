@@ -2,27 +2,6 @@ import { ApolloClient, ApolloError, InMemoryCache, gql } from '@apollo/client';
 import { EntityModelAppUser } from './generated';
 import { FailResponse, Response, SuccessResponse, UpdateUserVariables, UserInput } from './interfaces';
 
-// Apollo Clientのインスタンスを作成
-const client = new ApolloClient({
-    uri: 'http://localhost:3000/graphql', // GraphQLエンドポイントのURL
-    cache: new InMemoryCache()
-});
-
-// GraphQLクエリを定義
-const mutationUpdateUser = gql`
-  mutation UpdateUser($user: UserInput) {
-    updateUser(user: $user) {
-    ... on SuccessResponse {
-      success
-    }
-    ... on FailResponse {
-      error
-      message
-      success
-    }
-  }
-  }
-`;
 
 interface ResultData {
     // data に入ってくるオブジェクト名と、その型
@@ -36,11 +15,35 @@ const isFailResponse = (arg: unknown): arg is FailResponse => {
 
 // クエリを実行してデータを取得する関数
 const updateUser = async (variables: UpdateUserVariables) => {
+
+    // Apollo Clientのインスタンスを作成
+    const client = new ApolloClient({
+        uri: 'http://localhost:3000/graphql', // GraphQLエンドポイントのURL
+        cache: new InMemoryCache()
+    });
+
+    // GraphQLクエリを定義
+    const mutationUpdateUser = gql`
+        mutation UpdateUser($user: UserInput) {
+          updateUser(user: $user) {
+            ... on SuccessResponse {
+              success
+            }
+            ... on FailResponse {
+              error
+              message
+              success
+            }
+          }
+        }
+        `;
+
     try {
         const result = await client.mutate<ResultData, UpdateUserVariables>({
             mutation: mutationUpdateUser,
             variables: variables
-        });
+        }); // 戻り値はResultData、引数は、UpdateUserVariablesの型であると指定
+
         if (result.errors) {
             console.error('GraphQL errors:', result.errors);
         } else {
@@ -55,7 +58,7 @@ const updateUser = async (variables: UpdateUserVariables) => {
             }
         }
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error update data:', error);
     }
 }
 

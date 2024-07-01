@@ -1,33 +1,33 @@
 import { ApolloClient, ApolloError, InMemoryCache, gql } from '@apollo/client';
 import { EntityModelAppUser } from './generated';
-import { Response, UserInput } from './interfaces';
-
-// Apollo Clientのインスタンスを作成
-const client = new ApolloClient({
-    uri: 'http://localhost:3000/graphql', // GraphQLエンドポイントのURL
-    cache: new InMemoryCache()
-});
-
-// GraphQLクエリを定義
-const queryGetUsers = gql`
-  query GetUsers {
-    users {
-      id
-      email
-    }
-  }
-`;
 
 interface ResultData {
     // data に入ってくるオブジェクト名と、その型
     users: EntityModelAppUser[];
 }
 
-// クエリを実行してデータを取得する関数
 const fetchUsers = async () => {
+
+    // Apollo Clientのインスタンスを作成
+    const client = new ApolloClient({
+        uri: 'http://localhost:3000/graphql', // GraphQLエンドポイントのURL
+        cache: new InMemoryCache()
+    });
+
+    // GraphQLクエリを定義
+    const queryGetUsers = gql`
+        query GetUsers {
+          users {
+            id
+            email
+          }
+        }
+        `;
+
+    // クエリを実行してデータを取得する関数
     try {
         console.log('Loading...')
-        const result = await client.query<ResultData>({ query: queryGetUsers });
+        const result = await client.query<ResultData>({ query: queryGetUsers }); // 戻り値の型を ResultData と指定
         if (result.error) {  //実際はここはなさそう？ 
             console.error('Error fetching data:', result.error)
         } else {
